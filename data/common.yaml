@@ -1,2 +1,18 @@
 ---
 message: "This node is using common data"
+
+
+
+# --Nothing. We don't need any per-node values right now.
+
+# /etc/puppetlabs/code/environments/production/data/groups/ci/prod.yaml
+profile::jenkins::master::jenkins_port: '80'
+
+# /etc/puppetlabs/code/environments/production/data/groups/ci.yaml
+profile::jenkins::master::java_dist: 'oracle-jdk8'
+profile::jenkins::master::java_version: '8u92'
+
+# /etc/puppetlabs/code/environments/production/data/common.yaml
+# --Nothing. Just use the default parameter values.
+
+
