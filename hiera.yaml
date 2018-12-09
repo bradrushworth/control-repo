@@ -10,4 +10,7 @@ hierarchy:
     paths:
       - "passwords/%{trusted.certname}.yaml"
       - "nodes/%{trusted.certname}.yaml"
-      - 'common.yaml'
+      - "os/distro/%{facts.os.name}/%{facts.os.release.major}.yaml"
+      - "os/family/%{facts.os.family}.yaml"
+      - "common.yaml"
+

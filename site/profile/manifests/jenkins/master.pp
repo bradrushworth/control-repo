@@ -24,13 +24,41 @@ class profile::jenkins::master (
     before       => Class['jenkins'],
   }
 
-  class { 'android':
-    user         => 'jenkins',
-    group        => 'jenkins',
-    installdir   => '/usr/local/android',
+  java_ks { 'jenkins_truststore':
+    ensure       => latest,
+    certificate  => '/etc/puppetlabs/puppet/ssl/certs/ca.pem',
+    target       => '/var/lib/jenkins/truststore.jks',
+    password     => 'changeit',
+    trustcacerts => true,
   }
-  android::platform { 'android-28': }
-  android::build_tools { 'build-tools-28.0.3': }
+
+  java_ks { 'jenkins_keystore':
+    ensure              => latest,
+    certificate         => '/etc/puppetlabs/puppet/ssl/certs/jenkins.bitbot.net.au.pem',
+    private_key         => '/etc/puppetlabs/puppet/ssl/private_keys/jenkins.bitbot.net.au.pem',
+    private_key_type    => 'rsa',
+    target              => '/var/lib/jenkins/jenkins.jks',
+    password            => $jenkins_brad_password,
+    password_fail_reset => true,
+  }
+
+#  class { 'android':
+#    user         => 'jenkins',
+#    group        => 'jenkins',
+#    installdir   => '/usr/local/android',
+#  }
+#  android::platform { 'android-28': }
+#  android::build_tools { 'build-tools-28.0.3': }
+
+# cd /usr/local/android
+# wget https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+# yum install unzip
+# mkdir android-sdk-linux
+# unzip sdk-tools-linux-4333796.zip android-sdk-linux
+# ./tools/bin/sdkmanager --update
+# ./tools/bin/sdkmanager "build-tools;28.0.3"
+# ./tools/bin/sdkmanager --licenses
+# ANDROID_HOME = /usr/local/android/android-sdk-linux
 
   file { '/root/.ssh':
     ensure       => 'directory',
@@ -60,9 +88,17 @@ class profile::jenkins::master (
 
   class { 'jenkins':
     executors          => 1,
+    config_hash => {
+      'JENKINS_AJP_PORT'                => { 'value' => '9009' },
+      'JENKINS_PORT'                    => { 'value' => '8080' },
+      'JENKINS_LISTEN_ADDRESS'          => { 'value' => '127.0.0.1' },
+      'JENKINS_HTTPS_LISTEN_ADDRESS'    => { 'value' => '0.0.0.0' },
+      'JENKINS_HTTPS_PORT'              => { 'value' => '8443' },
+      'JENKINS_HTTPS_KEYSTORE'          => { 'value' => '/var/lib/jenkins/jenkins.jks' },
+      'JENKINS_HTTPS_KEYSTORE_PASSWORD' => { 'value' => $jenkins_brad_password },
+    },
     configure_firewall => false,
     install_java       => false,
-#    cli_ssh_keyfile    => '/var/lib/jenkins/.ssh/id_rsa.pub',
   }
 
   class { 'jenkins::security':
@@ -84,6 +120,10 @@ class profile::jenkins::master (
   jenkins::plugin { 'workflow-api': }
   jenkins::plugin { 'workflow-step-api': }
   jenkins::plugin { 'workflow-scm-step': }
+  jenkins::plugin { 'gradle': }
+  jenkins::plugin { 'bouncycastle-api': }
+  jenkins::plugin { 'command-launcher': }
+  jenkins::plugin { 'jdk-tool': }
   jenkins::plugin { 'git': }
   jenkins::plugin { 'subversion': }
   jenkins::plugin { 'git-client': }
@@ -97,5 +137,9 @@ class profile::jenkins::master (
   jenkins::plugin { 'display-url-api': }
   jenkins::plugin { 'junit': }
   jenkins::plugin { 'script-security': }
+
+#  jenkins::job { 'aus-phone-towers':
+#    config => template("${templates}/aus-phone-towers.xml.erb"),
+#  }
 
 }

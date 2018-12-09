@@ -17,9 +17,9 @@ class profile::puppet::agent (
     ensure     => 'present',
     report     => 'errors',
     email      => 'bitbot@bitbot.com.au',
-    hour       => 5,
-    minute     => 50,
-    splaylimit => '30m',
+    hour       => 20,
+    minute     => 00,
+    splaylimit => '60m',
   }
 
 }

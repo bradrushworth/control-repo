@@ -11,6 +11,7 @@ mod 'puppetlabs-ruby'
 mod 'puppetlabs-java'
 mod 'puppetlabs-vcsrepo'
 mod 'puppetlabs-firewall'
+mod 'puppetlabs-java_ks'
 
 mod 'puppetlabs-cron_core'
 mod 'puppetlabs-yumrepo_core'
