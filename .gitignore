@@ -1,4 +1,4 @@
 modules/
 .r10k-deploy.json
 .resource_types
-
+data/passwords

@@ -32,5 +32,10 @@ node default {
 }
 
 node 'puppet.bitbot.net.au' {
-  include role::jenkins::master
+  include ::role::puppet::master
 }
+
+node 'jenkins.bitbot.net.au' {
+  include ::role::jenkins::master
+}
+

@@ -1,0 +1,4 @@
+jenkins::cli_remoting_free: true
+jenkins::cli_username: 'brad'
+jenkins::cli_password: "%{hiera('profile::jenkins::master::jenkins_brad_password')}"
+
