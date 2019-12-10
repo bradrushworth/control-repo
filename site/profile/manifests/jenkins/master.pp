@@ -86,6 +86,13 @@ class profile::jenkins::master (
     mode         => '644',
   }
 
+  include ::firewall
+  firewall { '501 allow Jenkins https access':
+    dport  => [8443],
+    proto  => tcp,
+    action => accept,
+  }
+
   class { 'jenkins':
     executors          => 1,
     config_hash => {
@@ -97,7 +104,7 @@ class profile::jenkins::master (
       'JENKINS_HTTPS_KEYSTORE'          => { 'value' => '/var/lib/jenkins/jenkins.jks' },
       'JENKINS_HTTPS_KEYSTORE_PASSWORD' => { 'value' => $jenkins_brad_password },
     },
-    configure_firewall => false,
+    configure_firewall => true,
     install_java       => false,
   }
 

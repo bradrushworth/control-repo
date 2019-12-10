@@ -5,7 +5,7 @@ if [ $# -ne 2 -o ! -d "$1" -o ! -d "$1/$2" ]; then
   exit 1
 fi
 
-ruby=ruby
+ruby=/usr/local/bin/ruby
 
 if [ -x /opt/puppetlabs/puppet/bin/ruby ]; then
   ruby=/opt/puppetlabs/puppet/bin/ruby
