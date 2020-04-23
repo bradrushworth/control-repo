@@ -94,6 +94,7 @@ class profile::jenkins::master (
   }
 
   class { 'jenkins':
+    version            => 'latest',
     executors          => 1,
     config_hash => {
       'JENKINS_AJP_PORT'                => { 'value' => '9009' },
